@@ -6,7 +6,7 @@
     <title>Anirban Dey | AI Strategy & Architecture Executive</title>
     <!-- Chosen Palette: Warm Neutrals (Slate, Sky) -->
     <!-- Application Structure Plan: A single-page application with a sticky top navigation bar for easy access to different sections. The structure is designed to be a dashboard/portfolio rather than a linear document. It starts with a high-level profile, then an interactive timeline for experience (users click a company to see details, making it less overwhelming), a visual skills dashboard with a chart, and dedicated sections for education and high-impact achievements. This non-linear, interactive structure allows recruiters to quickly grasp key strengths and explore details on demand, which is more user-friendly and engaging than a static PDF. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Visualization & Content Choices:
         - Experience: Report Info -> Chronological Job History. Goal -> Organize, Show Progression. Viz -> Interactive HTML/CSS Timeline. Interaction -> JS onClick to reveal details for a selected company. Justification -> Breaks down a long history into digestible, user-selected chunks. Library -> Vanilla JS.
         - Skills: Report Info -> List of technical/domain skills. Goal -> Compare, Inform. Viz -> Horizontal Bar Chart (Chart.js) & categorized lists. Interaction -> Hover tooltips on chart bars. Justification -> Visualizes core competencies and proficiency levels (inferred from resume emphasis) more effectively than a simple list. Library -> Chart.js.
         - Key Achievements: Report Info -> Quantifiable results from job descriptions. Goal -> Inform, Impress. Viz -> "Stat Cards" with large numbers. Interaction -> None needed; impact is in the data. Justification -> Extracts the most powerful results from the text and presents them for immediate impact. Library -> HTML/CSS.
@@ -85,7 +85,7 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="#profile" class="text-xl font-bold text-slate-1000">Anirban Dey</a>
+                    <a href="#profile" class="text-2xl font-bold text-slate-900">Anirban Dey</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -105,6 +105,8 @@
         <!-- Profile Section -->
         <section id="profile" class="mb-16">
             <div class="text-center mb-12">
+                <!-- Profile Thumbnail -->
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQECOLeoclBCnA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1665421755244?e=1756339200&v=beta&t=tSirT-qzm__AJo1b2hX25CNqiBy4dNO59_hh6DmwzTs" alt="Anirban Dey Profile Photo" class="w-24 h-24 rounded-full mx-auto mb-6 shadow-md border-2 border-slate-200 object-cover">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">AI Strategy & Architecture Executive</h1>
                 <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">A results-driven executive with 20 years of experience, specializing in AI strategy, ethical governance, and leading high-performing data science teams in global financial organizations.</p>
                 <div class="mt-6 flex justify-center items-center space-x-6 text-sm">
@@ -147,7 +149,7 @@
                 <h2 class="text-3xl font-bold text-slate-900">Professional Experience</h2>
                 <p class="mt-2 max-w-2xl mx-auto text-slate-600">This interactive timeline showcases my career progression and key roles. Click on a company to explore my contributions and achievements during that period.</p>
             </div>
-            
+
             <div class="flex flex-col md:flex-row gap-8">
                 <div class="w-full md:w-1/4 flex md:flex-col justify-center space-x-2 md:space-x-0 md:space-y-4 overflow-x-auto pb-4">
                     <div class="timeline-item flex-shrink-0" data-company="citi">
@@ -361,7 +363,7 @@
             async function summarizeExperience() {
                 const summaryDiv = document.getElementById('ai-summary');
                 const summarizeButton = document.getElementById('summarize-button');
-                
+
                 if (!summaryDiv || !summarizeButton) return;
 
                 summaryDiv.innerHTML = '<div class="summary-loading">Generating summary...</div>';
@@ -382,7 +384,7 @@
                     const payload = { contents: chatHistory };
                     const apiKey = "";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                    
+
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -390,7 +392,7 @@
                     });
 
                     const result = await response.json();
-                    
+
                     if (result.candidates && result.candidates.length > 0 &&
                         result.candidates[0].content && result.candidates[0].content.parts &&
                         result.candidates[0].content.parts.length > 0) {
@@ -414,20 +416,20 @@
                 detailsContainer.innerHTML = '';
                 const content = document.createElement('div');
                 content.className = 'fade-in';
-                
+
                 let html = `<h3 class="text-2xl font-bold text-slate-900">${data.title}</h3><p class="text-md font-semibold text-sky-600 mb-4">${data.company}</p><ul class="space-y-3 text-slate-700 list-disc list-inside">`;
                 data.items.forEach(item => {
                     html += `<li>${item}</li>`;
                 });
                 html += '</ul>';
-                
+
                 html += `
                     <button id="summarize-button" class="mt-6 px-4 py-2 bg-sky-600 text-white rounded-lg shadow-md hover:bg-sky-700 transition-colors duration-200">
                         Summarize with AI ✨
                     </button>
                     <div id="ai-summary" class="mt-4"></div>
                 `;
-                
+
                 content.innerHTML = html;
                 detailsContainer.appendChild(content);
 
