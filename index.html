@@ -11,7 +11,7 @@
         - Skills: Report Info -> List of technical/domain skills. Goal -> Compare, Inform. Viz -> Horizontal Bar Chart (Chart.js) & categorized lists. Interaction -> Hover tooltips on chart bars. Justification -> Visualizes core competencies and proficiency levels (inferred from resume emphasis) more effectively than a simple list. Library -> Chart.js.
         - Key Achievements: Report Info -> Quantifiable results from job descriptions. Goal -> Inform, Impress. Viz -> "Stat Cards" with large numbers. Interaction -> None needed; impact is in the data. Justification -> Extracts the most powerful results from the text and presents them for immediate impact. Library -> HTML/CSS.
         - AI-Powered Summary: Report Info -> Current Experience Details. Goal -> Summarize key information. Viz -> Text output. Interaction -> Button click to generate summary using LLM. Justification -> Provides quick, AI-generated insights for recruiters. Library -> Gemini API (gemini-2.0-flash) via Fetch API.
-        - Overall: The design uses clean cards, ample whitespace, and a professional color scheme to create a modern, dashboard-like feel, enhancing readability and user experience.
+        - Overall: The design uses clean cards, ample whitespace, and a professional color scheme to create a modern, dashboard-like feel, enhancing readability and user-friendly experience.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -135,10 +135,9 @@
                 <div class="bg-white p-6 rounded-xl shadow-md">
                     <h3 class="text-xl font-bold text-slate-900 mb-4">Key Recognitions</h3>
                     <ul class="space-y-2 text-slate-700">
-                        <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">●</span>Tech & Innovation Award [Citi's annual R&R Red Carpet 2025]</li>
-                        <li class="flex items-start"><span class="text-amber-500 mr-2 mt-1">●</span>Gold Award [from Global Leadership]</li>
-                        <li class="flex items-start"><span class="text-orange-700 mr-2 mt-1">●</span>Copper Award [from Citi India Leadership]</li>
-                        <li class="flex items-start"><span class="text-sky-500 mr-2 mt-1">●</span>Bravo Award [for Driving Innovation]</li>
+                        <li class="flex items-start"><span class="text-amber-500 mr-2 mt-1">●</span>Gold Award from Global Head of CitiKYC</li>
+                        <li class="flex items-start"><span class="text-orange-700 mr-2 mt-1">●</span>Copper Award from CSC India Leadership</li>
+                        <li class="flex items-start"><span class="text-sky-500 mr-2 mt-1">●</span>Bravo Award for Driving Innovation</li>
                     </ul>
                 </div>
             </div>
@@ -274,10 +273,6 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-4">Academic Background</h3>
                     <ul class="space-y-4">
                         <li>
-                            <p class="font-semibold text-slate-800">Masters in Financial Technology Management (in progress)</p>
-                            <p class="text-sm text-slate-600">Indian Institute of Technology, Kanpur</p>
-                        </li>
-                        <li>
                             <p class="font-semibold text-slate-800">PG Diploma in Business Analytics & Business Intelligence</p>
                             <p class="text-sm text-slate-600">Great Lakes Institute of Management, Chennai</p>
                         </li>
@@ -361,54 +356,6 @@
             const timelineItems = document.querySelectorAll('.timeline-item');
             const detailsContainer = document.getElementById('experience-details');
 
-            async function summarizeExperience() {
-                const summaryDiv = document.getElementById('ai-summary');
-                const summarizeButton = document.getElementById('summarize-button');
-
-                if (!summaryDiv || !summarizeButton) return;
-
-                summaryDiv.innerHTML = '<div class="summary-loading">Generating summary...</div>';
-                summarizeButton.disabled = true;
-
-                const dataToSummarize = experienceData[currentCompanyKey];
-                if (!dataToSummarize) {
-                    summaryDiv.innerHTML = '<div class="text-red-500">Error: Could not retrieve experience data for summary.</div>';
-                    summarizeButton.disabled = false;
-                    return;
-                }
-
-                const prompt = `Summarize the following professional experience section concisely, highlighting key contributions and achievements in bullet points:\n\nCompany: ${dataToSummarize.company}\nTitle: ${dataToSummarize.title}\n\nKey Responsibilities and Achievements:\n${dataToSummarize.items.map(item => `- ${item.replace(/<[^>]*>/g, '')}`).join('\n')}`;
-
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const result = await response.json();
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        summaryDiv.innerHTML = `<div class="summary-box"><strong>AI-Powered Summary:</strong><p class="mt-2">${text}</p></div>`;
-                    } else {
-                        summaryDiv.innerHTML = '<div class="text-red-500">Error: Could not generate summary. Please try again.</div>';
-                    }
-                } catch (error) {
-                    summaryDiv.innerHTML = `<div class="text-red-500">Error generating summary: ${error.message}.</div>`;
-                } finally {
-                    summarizeButton.disabled = false;
-                }
-            }
-
             function displayExperience(companyKey) {
                 currentCompanyKey = companyKey; // Update current company key
                 const data = experienceData[companyKey];
@@ -424,18 +371,12 @@
                 });
                 html += '</ul>';
 
-                html += `
-                    <button id="summarize-button" class="mt-6 px-4 py-2 bg-sky-600 text-white rounded-lg shadow-md hover:bg-sky-700 transition-colors duration-200">
-                        Summarize with AI ✨
-                    </button>
-                    <div id="ai-summary" class="mt-4"></div>
-                `;
+                // Removed the AI summary button and div here
 
                 content.innerHTML = html;
                 detailsContainer.appendChild(content);
 
-                // Attach event listener to the new button
-                document.getElementById('summarize-button').addEventListener('click', summarizeExperience);
+                // Removed the event listener for the AI summary button here
 
                 timelineItems.forEach(item => {
                     item.classList.remove('active');
